@@ -27,7 +27,6 @@ const CANAL_LOGS_ID = null; // Ejemplo: "123456789012345678"
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.DirectMessages,
   ],
 });
