@@ -11,15 +11,8 @@ import {
 import dotenv from "dotenv";
 dotenv.config();
 
-// ─── Configuración ─────────────────────────────────────────────────────────────
-
-const ROLES_PERMITIDOS = [
-  // "123456789012345678",  // ID del rol "Moderador"
-];
-
-const CANAL_LOGS_ID = null; // Ejemplo: "123456789012345678"
-
-// ─── Registro automático de comandos ──────────────────────────────────────────
+const ROLES_PERMITIDOS = [];
+const CANAL_LOGS_ID = null;
 
 const commands = [
   new SlashCommandBuilder()
@@ -38,7 +31,8 @@ const commands = [
           { name: "🔇 Silenciado (Mute)", value: "mute" },
           { name: "🦶 Expulsión (Kick)", value: "kick" },
           { name: "🔨 Baneo Temporal", value: "ban_temp" },
-          { name: "⛔ Baneo Permanente", value: "ban_perm" }
+          { name: "⛔ Baneo Permanente", value: "ban_perm" },
+          { name: "🔒 Jail", value: "jail" }
         )
     )
     .addStringOption((o) =>
@@ -57,8 +51,6 @@ async function registrarComandos() {
   }
 }
 
-// ─── Cliente de Discord ────────────────────────────────────────────────────────
-
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -66,14 +58,13 @@ const client = new Client({
   ],
 });
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-
 const TIPOS_SANCION = {
-  advertencia: { label: "⚠️ Advertencia", color: 0xf59e0b, emoji: "⚠️" },
-  mute:        { label: "🔇 Silenciado (Mute)", color: 0x6366f1, emoji: "🔇" },
-  kick:        { label: "🦶 Expulsión (Kick)", color: 0xf97316, emoji: "🦶" },
-  ban_temp:    { label: "🔨 Baneo Temporal", color: 0xef4444, emoji: "🔨" },
-  ban_perm:    { label: "⛔ Baneo Permanente", color: 0x991b1b, emoji: "⛔" },
+  advertencia: { label: "⚠️ Advertencia",       color: 0xf59e0b, emoji: "⚠️" },
+  mute:        { label: "🔇 Silenciado (Mute)",  color: 0x6366f1, emoji: "🔇" },
+  kick:        { label: "🦶 Expulsión (Kick)",   color: 0xf97316, emoji: "🦶" },
+  ban_temp:    { label: "🔨 Baneo Temporal",     color: 0xef4444, emoji: "🔨" },
+  ban_perm:    { label: "⛔ Baneo Permanente",   color: 0x991b1b, emoji: "⛔" },
+  jail:        { label: "🔒 Jail",               color: 0x78716c, emoji: "🔒" },
 };
 
 function tienePermiso(member) {
@@ -130,8 +121,6 @@ function crearEmbedLog({ usuario, tipo, motivo, duracion, staff, dmEnviado }) {
     .setFooter({ text: `ID Usuario: ${usuario.id}` });
 }
 
-// ─── Eventos ───────────────────────────────────────────────────────────────────
-
 client.once("ready", async () => {
   console.log(`✅ Bot conectado como: ${client.user.tag}`);
   console.log(`📡 Servidores: ${client.guilds.cache.size}`);
@@ -159,13 +148,11 @@ client.on("interactionCreate", async (interaction) => {
   const staff        = interaction.user;
   const guild        = interaction.guild;
 
-  if (usuarioTarget.id === staff.id) {
+  if (usuarioTarget.id === staff.id)
     return interaction.editReply({ content: "❌ No podés sancionarte a vos mismo." });
-  }
 
-  if (usuarioTarget.bot) {
+  if (usuarioTarget.bot)
     return interaction.editReply({ content: "❌ No podés sancionar a bots." });
-  }
 
   const embedSancion = crearEmbedSancion({ usuario: usuarioTarget, tipo, motivo, duracion, staff, guild });
 
@@ -180,9 +167,8 @@ client.on("interactionCreate", async (interaction) => {
   if (CANAL_LOGS_ID) {
     try {
       const canalLogs = await guild.channels.fetch(CANAL_LOGS_ID);
-      if (canalLogs) {
+      if (canalLogs)
         await canalLogs.send({ embeds: [crearEmbedLog({ usuario: usuarioTarget, tipo, motivo, duracion, staff, dmEnviado })] });
-      }
     } catch (err) {
       console.error("Error al enviar log:", err);
     }
@@ -210,11 +196,7 @@ client.on("interactionCreate", async (interaction) => {
   });
 });
 
-// ─── Errores ───────────────────────────────────────────────────────────────────
-
 client.on("error", (error) => console.error("❌ Error del cliente:", error));
 process.on("unhandledRejection", (error) => console.error("❌ Promesa rechazada:", error));
-
-// ─── Login ─────────────────────────────────────────────────────────────────────
 
 client.login(process.env.TOKEN);
