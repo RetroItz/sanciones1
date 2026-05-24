@@ -1,18 +1,18 @@
 {
-  "name": "bot-sanciones",
+  "name": "aventura-guard",
   "version": "1.0.0",
-  "description": "Bot de Discord para notificar sanciones",
+  "description": "Bot de sanciones para AVENTURA",
   "main": "index.js",
   "type": "module",
   "engines": {
     "node": ">=18.0.0"
   },
   "scripts": {
-    "start": "node index.js",
-    "deploy": "node deploy-commands.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "discord.js": "^14.15.3",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "pg": "^8.12.0"
   }
 }
