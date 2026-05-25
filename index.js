@@ -215,8 +215,8 @@ app.delete("/api/vinculaciones/:nick", requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`✅ API corriendo en puerto ${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, "0.0.0.0", () => console.log(`✅ API corriendo en puerto ${PORT}`));
 
 // ─── BOT CONFIG ────────────────────────────────────────────────────────────────
 const commands = [
