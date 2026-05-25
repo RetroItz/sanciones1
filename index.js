@@ -104,16 +104,8 @@ app.get("/auth/callback", async (req, res) => {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
     const userData = await userRes.json();
-    // Verificar que sea staff del servidor
-    const guild = client.guilds.cache.first();
-    let isStaff = false;
-    if (guild) {
-      try {
-        const member = await guild.members.fetch(userData.id);
-        isStaff = tienePermiso(member);
-      } catch { isStaff = false; }
-    }
-    if (!isStaff) return res.redirect(`${PANEL_URL}/login?error=no_permission`);
+    // Permitir acceso a cualquier usuario de Discord
+    let isStaff = true;
     req.session.user = {
       id: userData.id,
       username: userData.username,
