@@ -121,7 +121,7 @@ app.get("/auth/callback", async (req, res) => {
         ? `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`
         : `https://cdn.discordapp.com/embed/avatars/0.png`,
     };
-    res.redirect(`${PANEL_URL}/dashboard`);
+    res.redirect(`${PANEL_URL.replace(/\/+$/, '')}/dashboard`);
   } catch (err) {
     console.error("Auth error:", err);
     res.redirect(`${PANEL_URL}/login?error=auth_failed`);
