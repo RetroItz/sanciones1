@@ -1,18 +1,17 @@
 {
-  "name": "aventura-guard",
-  "version": "1.0.0",
-  "description": "Bot de sanciones para AVENTURA",
+  "name": "aventuraguard",
+  "version": "2.0.0",
+  "description": "Bot de sanciones AVENTURA con panel web",
   "main": "index.js",
   "type": "module",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "scripts": {
-    "start": "node index.js"
-  },
+  "engines": { "node": ">=18.0.0" },
+  "scripts": { "start": "node index.js" },
   "dependencies": {
+    "cors": "^2.8.5",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "express-session": "^1.18.0",
     "pg": "^8.12.0"
   }
 }
