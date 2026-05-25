@@ -52,8 +52,9 @@ const CANAL_LOGS_ID = null;
 const DISCORD_CLIENT_ID = process.env.CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const PANEL_URL = process.env.PANEL_URL || "http://localhost:3000";
-const API_URL = process.env.API_URL || "http://localhost:4000";
-const REDIRECT_URI = `${API_URL}/auth/callback`;
+const API_URL = (process.env.API_URL || "http://localhost:4000").replace(/\/+$/, "");
+const ENSURE_HTTPS = (url) => url.startsWith("http") ? url : `https://${url}`;
+const REDIRECT_URI = `${ENSURE_HTTPS(API_URL)}/auth/callback`;
 
 // ─── EXPRESS API ───────────────────────────────────────────────────────────────
 const app = express();
